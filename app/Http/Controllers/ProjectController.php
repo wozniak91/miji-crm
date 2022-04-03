@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Task;
+use App\Model\Project;
 
-class TaskController extends Controller
+class ProjectController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +14,7 @@ class TaskController extends Controller
      */
     public function index()
     {
-        return Task::latest()->paginate(50);
+        return Project::latest()->paginate(50);
     }
 
     /**
@@ -28,17 +28,17 @@ class TaskController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string',
-            'point' => 'required|numeric',
             'active' => 'boolean',
+            'status' => 'required|numeric',
             'start_date' => 'required|date|after:today',
             'finish_date' => 'required|date|after:start_date',
         ]);
 
-        return Task::create([
+        return Project::create([
             'name' => $request->name,
             'description' => $request->description,
-            'point' => $request->point,
             'active' => $request->active,
+            'status' => $request->status,
             'start_date' => $request->start_date,
             'finish_date' => $request->finish_date,
         ]);
@@ -52,7 +52,7 @@ class TaskController extends Controller
      */
     public function show($id)
     {
-        return Task::findOrFail($id);
+        return Project::findOrFail($id);
     }
 
     /**
@@ -67,16 +67,16 @@ class TaskController extends Controller
         $request->validate([
             'name' => 'string|max:255',
             'description' => 'string',
-            'point' => 'numeric',
             'active' => 'boolean',
-            'start_date' => 'date|after:tomorrow',
+            'status' => 'numeric',
+            'start_date' => 'date|after:today',
             'finish_date' => 'date|after:start_date',
         ]);
 
-        $task = Task::findOrFail($id);
-        $task->update($request->all());
+        $project = Project::findOrFail($id);
+        $project->update($request->all());
 
-        return $task;
+        return $project;
     }
 
     /**
@@ -87,8 +87,8 @@ class TaskController extends Controller
      */
     public function destroy($id)
     {
-        $task = Task::findOrFail($id);
+        $project = Project::findOrFail($id);
 
-        return $task->delete();
+        return $project->delete();
     }
 }

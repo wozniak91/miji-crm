@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\UserController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -25,6 +26,7 @@ Route::post('register', [RegisterController::class, 'register']);
 // Only authenticated requests
 Route::middleware('auth:sanctum')->group(function () {
 
+    Route::get('user', [UserController::class, 'getMe']);
     Route::get('tasks', [TaskController::class, 'index']);
     Route::get('tasks/{id}', [TaskController::class, 'show']);
     Route::post('tasks', [TaskController::class, 'store']);
